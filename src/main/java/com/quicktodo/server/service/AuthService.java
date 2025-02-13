@@ -16,6 +16,12 @@ public class AuthService {
     }
 
     public User register(String username, String password) {
+        // 检查用户名是否已存在
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+        // 创建新用户
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
