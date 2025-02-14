@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -24,7 +22,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> register(@RequestBody User request) {
         try {
             User user = authService.register(request.getUsername(), request.getPassword());
             return ResponseEntity.ok(Map.of("message", "注册成功", "userId", user.getId()));
@@ -34,15 +32,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@RequestBody User request) {
         User user = authService.login(request.getUsername(), request.getPassword());
         if (user != null) {
             String token = jwtUtil.generateToken(request.getUsername());
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(Map.of("token", token, "userId", user.getId()));
         } else {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "Invalid username or password"));
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid username or password"));
         }
     }
 
