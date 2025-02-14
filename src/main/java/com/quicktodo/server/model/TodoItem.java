@@ -31,9 +31,9 @@ public class TodoItem {
     @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
 
-    @ManyToOne
+    //@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private long userId;
 
     @Enumerated(EnumType.STRING)
     private Priority priority;
@@ -46,4 +46,6 @@ public class TodoItem {
 
     @Column(name = "last_modified", nullable = false)
     private LocalDateTime lastModified = LocalDateTime.now(); // 最后修改时间
+
+    private Boolean deleted = false; // 是否删除
 }

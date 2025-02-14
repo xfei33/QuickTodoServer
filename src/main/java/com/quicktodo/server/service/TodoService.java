@@ -1,7 +1,6 @@
 package com.quicktodo.server.service;
 
 import com.quicktodo.server.model.TodoItem;
-import com.quicktodo.server.model.User;
 import com.quicktodo.server.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,7 @@ public class TodoService {
     public void saveIncrementalData(Long userId, List<TodoItem> incrementalData) {
         for (TodoItem todoItem : incrementalData) {
             // 正确创建 User 对象
-            User user = new User();
-            user.setId(userId);
-            todoItem.setUser(user); // 设置用户 ID
+            todoItem.setUserId(userId); // 设置用户 ID
             todoItem.setLastModified(LocalDateTime.now()); // 更新最后修改时间
             todoRepository.save(todoItem);
         }
