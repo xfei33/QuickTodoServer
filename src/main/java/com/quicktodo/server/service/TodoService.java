@@ -27,5 +27,14 @@ public class TodoService {
             todoRepository.save(todoItem);
         }
     }
+
+    // 获取最新 TodoItem 的最后修改时间
+    public LocalDateTime getLatestTodoItem(Long userId) {
+        TodoItem latestTodoItem = todoRepository.findFirstByUserIdOrderByLastModifiedDesc(userId);
+        if (latestTodoItem == null) {
+            return LocalDateTime.now();
+        }
+        return latestTodoItem.getLastModified();
+    }
 }
 

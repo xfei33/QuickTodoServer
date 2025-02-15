@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<TodoItem, Long> {
     List<TodoItem> findByUserIdAndLastModifiedAfter(Long userId, LocalDateTime lastSyncTime);
+    TodoItem findFirstByUserIdOrderByLastModifiedDesc(Long userId);
 }
