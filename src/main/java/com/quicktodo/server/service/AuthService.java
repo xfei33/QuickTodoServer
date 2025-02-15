@@ -5,6 +5,8 @@ import com.quicktodo.server.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthService {
     private final UserRepository userRepository;
@@ -25,6 +27,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setLastSyncTime(LocalDateTime.now());
         return userRepository.save(user);
     }
 
