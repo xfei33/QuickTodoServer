@@ -38,7 +38,7 @@ public class AuthController {
             String token = jwtUtil.generateToken(request.getUsername());
             return ResponseEntity.ok(Map.of("token", token, "userId", user.getId()));
         } else {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid username or password"));
+            return ResponseEntity.badRequest().body(Map.of("error", "用户名密码错误"));
         }
     }
 

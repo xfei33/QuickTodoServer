@@ -3,25 +3,24 @@ package com.quicktodo.server.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "todos", indexes = {
         @Index(name = "idx_user_id", columnList = "user_id"),
-        @Index(name = "idx_due_date", columnList = "due_date")
+        @Index(name = "idx_due_date", columnList = "due_date"),
+        @Index(name = "idx_priority", columnList = "priority")
 })
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = "user")
 public class TodoItem {
     public enum Priority { LOW, MEDIUM, HIGH }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long id;
+    private UUID id = UUID.randomUUID();
 
     @Column(nullable = false)
     private String title;
@@ -31,10 +30,11 @@ public class TodoItem {
     @Column(name = "due_date", nullable = false)
     private LocalDateTime dueDate;
 
-    //@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private long userId;
+    private User user;
 
+    @Column(name = "priority")
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
@@ -47,5 +47,11 @@ public class TodoItem {
     @Column(name = "last_modified", nullable = false)
     private LocalDateTime lastModified = LocalDateTime.now(); // 最后修改时间
 
-    private Boolean deleted = false; // 是否删除
+    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deleted = false; // 是否删除
+
+    @PreUpdate
+    public void preUpdate() {
+        lastModified = LocalDateTime.now();
+    }
 }

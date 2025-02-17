@@ -19,7 +19,7 @@ public class AuthService {
 
     public User register(String username, String password) {
         // 检查用户名是否已存在
-        if (userRepository.findByUsername(username).isPresent()) {
+        if (userRepository.findUserByUsername(username).isPresent()) {
             throw new RuntimeException("用户名已存在");
         }
 
@@ -32,7 +32,7 @@ public class AuthService {
     }
 
     public User login(String username, String password) {
-        return userRepository.findByUsername(username)
+        return userRepository.findUserByUsername(username)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElse(null);
     }

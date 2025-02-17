@@ -1,6 +1,6 @@
 package com.quicktodo.server.controller;
 
-import com.quicktodo.server.model.TodoItem;
+import com.quicktodo.server.model.TodoRequest;
 import com.quicktodo.server.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ public class TodoController {
 
     // 增量同步：获取服务端的增量数据
     @GetMapping("/sync")
-    public ResponseEntity<List<TodoItem>> getIncrementalData(
+    public ResponseEntity<List<TodoRequest>> getIncrementalData(
             @RequestParam Long userId,
             @RequestParam LocalDateTime lastSyncTime) {
-        List<TodoItem> incrementalData = todoService.getIncrementalData(userId, lastSyncTime);
+        List<TodoRequest> incrementalData = todoService.getIncrementalData(userId, lastSyncTime);
         return ResponseEntity.ok(incrementalData);
     }
 
@@ -28,7 +28,7 @@ public class TodoController {
     @PostMapping("/sync")
     public ResponseEntity<Void> uploadIncrementalData(
             @RequestParam Long userId,
-            @RequestBody List<TodoItem> incrementalData) {
+            @RequestBody List<TodoRequest> incrementalData) {
         todoService.saveIncrementalData(userId, incrementalData);
         return ResponseEntity.ok().build();
     }
